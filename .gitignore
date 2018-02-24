@@ -1,0 +1,15 @@
+.DS_Store
+*.pyc
+venv
+.Python
+bin/
+include/
+lib/
+pip-selfcheck.json
+*.pdf
+*.log
+*.aux
+*.out
+flask/data.json
+ngrok
+secrets.py
