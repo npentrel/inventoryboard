@@ -1,26 +1,28 @@
-from flask import Flask
-from secrets import DB_USER, DB_PASSWORD, DB_URL, DB_PORT
-import pymongo
+from clarifai import rest
+from clarifai.rest import ClarifaiApp
+from secrets import CLARIFAI_KEY
 
-connection = pymongo.MongoClient(DB_URL, DB_PORT)
-db = connection["inventory-dashboard"]
-db.authenticate(DB_USER, DB_PASSWORD)
+from flask import Flask
+import pymongo
+import json
+
 
 app = Flask(__name__)
 
 @app.route('/')
 def hello():
-    return "Hello World!"
+    clarifai = ClarifaiApp(api_key=CLARIFAI_KEY)
+    model = clarifai.models.get('color')
+    response = model.predict_by_url(url='https://samples.clarifai.com/metro-north.jpg')
+
+    if 'Red' not in response:
+        return json.dumps({'inventory_status': 'poor'})
+    else:
+        return json.dumps({'inventory_status': 'ok'})
 
 @app.route('/<name>')
 def hello_name(name):
     return "Hello {}!".format(name)
 
-@app.route('/insert/<name>')
-def hello_name(name):
-    resp = db.organizations.insert({"name": name, "chain_segments": [{"suppliers": [{"name": "Apple"}]}, {"factories": [{}]}, {"stores": [{"name": "{}'s store".format(name)}]}]})
-    return "Onject: {}!".format(resp)
-
-
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')
