@@ -19,7 +19,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # model = clarifai.models.get('color')
 # file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 # image = ClImage(file_obj=open('/home/user/image.jpeg', 'rb'))
-# response = model.predict_by_url(url='https://samples.clarifai.com/metro-north.jpg')
+# response = model.predict([image])
 # if 'Crimson' in response:
 #     return json.dumps({'inventory_status': 'poor'})
 # if 'Olive' in response:
